@@ -1,0 +1,1 @@
+This is the RESTFUL API of buddy chat app
