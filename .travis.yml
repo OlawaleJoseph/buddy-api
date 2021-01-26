@@ -1,9 +1,9 @@
 language: node_js
 node_js :
-- "14"
+  - "14"
 services:
-- mysql
+  - mysql
 before_install:
-- CREATE USER 'buddy'@'localhost' IDENTIFIED BY 'buddy';
-- GRANT ALL ON *.* TO 'buddy'@'localhost';
-- CREATE DATABASE IF NOT EXISTS buddy_test;   
+  - mysql -e "CREATE USER 'buddy'@'localhost' IDENTIFIED BY 'buddy'";
+  - mysql -e GRANT ALL ON *.* TO 'buddy'@'localhost';
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS buddy_test;'
