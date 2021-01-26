@@ -1,1 +1,2 @@
+[![Build Status](https://travis-ci.com/OlawaleJoseph/buddy-api.svg?branch=develop)](https://travis-ci.com/OlawaleJoseph/buddy-api) [![Coverage Status](https://coveralls.io/repos/github/OlawaleJoseph/buddy-api/badge.svg?branch=develop)](https://coveralls.io/github/OlawaleJoseph/buddy-api?branch=develop) [![Maintainability](https://api.codeclimate.com/v1/badges/400c418c9496d7d92947/maintainability)](https://codeclimate.com/github/OlawaleJoseph/buddy-api/maintainability)
 This is the RESTFUL API of buddy chat app
