@@ -1,0 +1,11 @@
+language: node_js
+node_js :
+  - "14"
+services:
+  - mysql
+before_install:
+  - mysql -e "CREATE USER 'buddy'@'localhost' IDENTIFIED BY 'buddy';"
+  - mysql -e "GRANT ALL ON *.* TO 'buddy'@'localhost';"
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS buddy_test;'
+after_success:
+  - npm run coverage
