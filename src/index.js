@@ -1,8 +1,14 @@
 import express from 'express';
+import { config } from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
+import cors from 'cors';
+import morgan from 'morgan';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
 
 const app = express();
+config();
 
 const basePath = '/api/v1';
 const swaggerOptions = {
@@ -32,6 +38,11 @@ const swaggerOptions = {
   apis: ['./routes*.js'],
 };
 
+app.use(bodyParser.json());
+app.use(cors());
+app.use(helmet());
+app.use(morgan('combined'));
+
 app.use(`${basePath}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(swaggerOptions)));
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
