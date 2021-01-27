@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import express from 'express';
 import { config } from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
@@ -29,6 +30,7 @@ const swaggerOptions = {
       },
     },
   },
+  basePath,
   servers: [
     {
       url: 'http://localhost:3000',
@@ -44,5 +46,23 @@ app.use(helmet());
 app.use(morgan('combined'));
 
 app.use(`${basePath}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(swaggerOptions)));
+
+app.use('*', (req, res, next) => {
+  const error = {
+    message: 'Route not found',
+    status: 404,
+  };
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  let { status } = error;
+  if (status === 200) status = 500;
+  res.status(status || 500).json({
+    success: false,
+    error,
+  });
+});
 
 app.listen(process.env.PORT || 3000);
