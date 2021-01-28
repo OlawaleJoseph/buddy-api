@@ -25,7 +25,7 @@ class DB {
     }
   }
 
-  async query(sql, values) {
+  async query(sql, values = null) {
     return new Promise((resolve, reject) => {
       const callback = (error, result) => {
         if (error) {
@@ -41,4 +41,4 @@ class DB {
   }
 }
 
-export default new DB().query;
+export default new DB();
