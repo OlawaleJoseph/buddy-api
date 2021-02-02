@@ -24,4 +24,5 @@ app.use('*', notFoundPathErrorHandler);
 
 app.use(errorHandler);
 
+export default app;
 app.listen(process.env.PORT || 3000);
