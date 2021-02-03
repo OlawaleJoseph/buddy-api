@@ -89,4 +89,14 @@ describe('User Registration', () => {
     expect(res.headers.Authorization).toBeTruthy();
     expect(res.headers.Authorization.split(' ')[0]).toEqual('Bearer');
   });
+
+  it('should return 409 if email already exist', async () => {
+    const res = await app.post(url).send(body);
+
+    expect(res.status).toEqual(409);
+    expect(res.status).not.toEqual(422);
+    expect(res.body.error).toContain('User already exist');
+    expect(res.body.success).toBeFalsy();
+    expect(res.headers.Authorization).toBeUndefined();
+  });
 });

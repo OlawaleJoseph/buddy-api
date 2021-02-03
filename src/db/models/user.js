@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    last_seen: DataTypes.DATE,
+    lastSeen: DataTypes.DATE,
     username: DataTypes.STRING,
     avatar: DataTypes.STRING,
   }, {
