@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import { errorHandler, notFoundPathErrorHandler } from './middlewares/Errors';
 import { basePath } from './utils/constants';
 import swaggerOptions from './docs/swaggerConfig';
+import { bodyTrimmer } from './middlewares/common';
 import routes from './routes';
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(morgan('dev'));
 
 app.use(`${basePath}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(swaggerOptions)));
 
+app.use(bodyTrimmer);
 app.use('/api/v1', routes);
 app.use('*', notFoundPathErrorHandler);
 app.use(errorHandler);
