@@ -5,7 +5,11 @@ export const validateRegistrationInput = (req, res, next) => {
   // const {
   //   username, email, password, avatar,
   // } = req.body;
-  const validations = registrationSchema.validate(req.body, schemaOptions);
-  console.log(validations);
+  const { error } = registrationSchema.validate(req.body, schemaOptions);
+  if (error) {
+    const messages = [];
+    error.details.forEach(({ message }) => messages.push(message));
+    next({ status: 422, message: messages });
+  }
   next();
 };

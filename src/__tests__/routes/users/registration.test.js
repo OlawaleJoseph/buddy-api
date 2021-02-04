@@ -3,21 +3,25 @@ import server from '../../../index';
 import { User } from '../../../db/models';
 import { regBody } from '../../../__mock__/user';
 
-const app = request(server.listen(5000));
+let app;
 
 describe('User Registration', () => {
   let body;
   const url = '/api/v1/auth/register';
+  beforeAll(async () => {
+    await User.sync({ force: true });
+    app = await request(server);
+  });
   beforeEach(() => {
     body = { ...regBody };
   });
 
-  beforeAll(async () => {
-    await User.sync({ force: true });
+  afterAll(async () => {
+    await server?.close();
   });
 
   it('should return 422 if no email is not given', async () => {
-    body.email = null;
+    body.email = undefined;
     const res = await app.post(url).send(body);
 
     expect(res.status).toEqual(422);
@@ -35,7 +39,7 @@ describe('User Registration', () => {
   });
 
   it('should return 422 if no username is not given', async () => {
-    body.username = null;
+    body.username = undefined;
     const res = await app.post(url).send(body);
 
     expect(res.status).toEqual(422);
@@ -53,7 +57,7 @@ describe('User Registration', () => {
   });
 
   it('should return 422 if no password is not given', async () => {
-    body.password = null;
+    body.password = undefined;
     const res = await app.post(url).send(body);
 
     expect(res.status).toEqual(422);
@@ -62,16 +66,16 @@ describe('User Registration', () => {
   });
 
   it('should return 422 if password is invalid', async () => {
-    body.username = 'password';
+    body.password = 'password';
     const res = await app.post(url).send(body);
 
     expect(res.status).toEqual(422);
     expect(res.status).not.toEqual(404);
-    expect(res.body.error).toContain('Password should be at least 8 characters with one uppercase and one number');
+    expect(res.body.error).toContain('Password should have at least an uppercase and a digit');
   });
 
   it('should return 422 if image is invalid', async () => {
-    body.image = 'invalid image';
+    body.avatar = 7890745;
     const res = await app.post(url).send(body);
 
     expect(res.status).toEqual(422);
@@ -81,13 +85,12 @@ describe('User Registration', () => {
 
   it('should return 201 for valid input', async () => {
     const res = await app.post(url).send(body);
-
     expect(res.status).toEqual(201);
     expect(res.status).not.toEqual(422);
     expect(res.body.error).toBeFalsy();
     expect(res.body.success).toBeTruthy();
-    expect(res.headers.Authorization).toBeTruthy();
-    expect(res.headers.Authorization.split(' ')[0]).toEqual('Bearer');
+    expect(res.headers.authorization).toBeTruthy();
+    expect(res.headers.authorization.split(' ')[0]).toEqual('Bearer');
   });
 
   it('should return 409 if email already exist', async () => {

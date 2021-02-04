@@ -33,6 +33,7 @@ class UserController {
       if (newUser) {
         const token = generateToken({ email });
         return res.status(201).set('Authorization', `Bearer ${token}`).json({
+          success: true,
           token,
         });
       }

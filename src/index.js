@@ -27,5 +27,8 @@ app.use('/api/v1', routes);
 app.use('*', notFoundPathErrorHandler);
 app.use(errorHandler);
 
+if (require.main === module) {
+  app.listen(process.env.PORT || 3000);
+}
+
 export default app;
-app.listen(process.env.PORT || 3000);
