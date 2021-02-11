@@ -31,17 +31,23 @@ class UserService {
         email,
       },
     });
-    delete user?.dataValues.password;
     if (user) return user?.dataValues;
     return false;
   }
 
   static hashPassword(password) {
-    const hash = crypto.createHmac('sha256', process.env.HASH_SECRET)
-      .update(password)
-      .digest('hex');
+    const hash = crypto.pbkdf2Sync(password, UserService.salt,
+      1000, 64, 'sha512').toString('hex');
     return hash;
   }
+
+  static verifyPassword(password, userPassword) {
+    const hash = crypto.pbkdf2Sync(password,
+      UserService.salt, 1000, 64, 'sha512').toString('hex');
+    return hash === userPassword;
+  }
 }
+
+UserService.salt = crypto.randomBytes(16).toString('hex');
 
 export default UserService;

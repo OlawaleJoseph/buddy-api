@@ -40,6 +40,22 @@ export const registrationSchema = Joi.object({
       'string.empty': 'Email cannot be blank',
       'string.email': 'Email is invalid',
       'any.required': 'Email is required',
-      // 'string.base': 'Email should be a string',
+    }),
+});
+
+export const loginSchema = Joi.object({
+  password: Joi.string()
+    .required()
+    .messages({
+      'string.base': 'Password should be a type of alphanumeric',
+      'string.empty': 'Password cannot be blank',
+      'any.required': 'Password is required',
+    }),
+
+  email: Joi.string().email().required()
+    .messages({
+      'string.empty': 'Email cannot be blank',
+      'string.email': 'Email is invalid',
+      'any.required': 'Email is required',
     }),
 });

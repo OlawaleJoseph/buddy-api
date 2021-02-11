@@ -2,6 +2,7 @@ import request from 'supertest';
 import server from '../../../index';
 import { User } from '../../../db/models';
 import { loginBody, regBody } from '../../../__mock__/user';
+import UserService from '../../../utils/userService';
 
 let app;
 
@@ -10,6 +11,7 @@ describe('User Registration', () => {
   const url = '/api/v1/auth/login';
   beforeAll(async () => {
     await User.sync({ force: true });
+    regBody.password = UserService.hashPassword(regBody.password);
     await User.create(regBody);
     app = request(server);
   });

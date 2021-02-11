@@ -1,5 +1,3 @@
-// import faker from 'faker';
-
 export const regBody = {
   username: 'username',
   email: 'test@mail.com',
