@@ -12,12 +12,14 @@ describe('User Registration', () => {
     await User.sync({ force: true });
     app = await request(server);
   });
+
   beforeEach(() => {
     body = { ...regBody };
   });
 
   afterAll(async () => {
     await server?.close();
+    await User.sync({ force: true });
   });
 
   it('should return 422 if no email is not given', async () => {

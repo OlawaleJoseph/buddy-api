@@ -18,7 +18,7 @@ module.exports = {
       lastSeen: {
         type: Sequelize.DATE,
         allowNull: false,
-        default: new Date(),
+        defaultValue: new Date(),
       },
       username: {
         type: Sequelize.STRING,
