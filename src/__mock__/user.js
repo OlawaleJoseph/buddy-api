@@ -8,6 +8,6 @@ export const regBody = {
 };
 
 export const loginBody = {
-  email: 'test@MediaList.com',
+  email: 'test@mail.com',
   password: 'Password1',
 };
