@@ -1,10 +1,15 @@
 import UserService from '../../utils/userService';
-import { User } from '../../db/models';
+import { User, sequelize } from '../../db/models';
 import { regBody } from '../../__mock__/user';
 
 describe('UserService', () => {
   beforeAll(async () => {
-    await User.sync({ force: true });
+    await User.destroy({ truncate: true });
+  });
+
+  afterAll(async () => {
+    await User.destroy({ truncate: true });
+    await sequelize.close();
   });
 
   describe('Register', () => {

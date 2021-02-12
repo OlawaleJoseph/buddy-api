@@ -1,26 +1,28 @@
 import request from 'supertest';
 import server from '../../../index';
-import { User } from '../../../db/models';
+import { User, sequelize } from '../../../db/models';
 import { loginBody, regBody } from '../../../__mock__/user';
 import UserService from '../../../utils/userService';
 
 let app;
 
-describe('User Registration', () => {
+describe('User Login', () => {
   let body;
   const url = '/api/v1/auth/login';
   beforeAll(async () => {
-    await User.sync({ force: true });
+    app = request(server);
+    await User.destroy({ truncate: true });
     regBody.password = UserService.hashPassword(regBody.password);
     await User.create(regBody);
-    app = request(server);
   });
+
   beforeEach(() => {
     body = { ...loginBody };
   });
 
   afterAll(async () => {
-    await server?.close();
+    await User.destroy({ truncate: true });
+    await sequelize.close();
   });
 
   it('should return 422 if no email is given', async () => {
@@ -41,7 +43,7 @@ describe('User Registration', () => {
     expect(res.body.error).toContain('Email is invalid');
   });
 
-  it('should return 404 if email is not registered', async () => {
+  it('should return 401 if email is not registered', async () => {
     body.email = 'unregistered@mail.com';
     const res = await app.post(url).send(body);
 
@@ -70,6 +72,7 @@ describe('User Registration', () => {
 
   it('should return 200 for successful login', async () => {
     const res = await app.post(url).send(body);
+
     expect(res.status).toEqual(200);
     expect(res.status).not.toEqual(422);
     expect(res.body.error).toBeFalsy();
