@@ -2,7 +2,15 @@ import { Model } from 'sequelize';
 
 module.exports = (sequelize, DataTypes) => {
   class Message extends Model {
-    static associate() {
+    static associate(models) {
+      Message.belongsTo(models.User, {
+        targetKey: 'id',
+        foreignKey: 'to',
+      });
+      Message.belongsTo(models.User, {
+        targetKey: 'id',
+        foreignKey: 'from',
+      });
     }
   }
   Message.init({
@@ -14,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    FROM: {
+    from: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

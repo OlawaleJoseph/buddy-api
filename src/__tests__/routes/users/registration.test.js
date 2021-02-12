@@ -1,6 +1,6 @@
 import request from 'supertest';
 import server from '../../../index';
-import { User, sequelize } from '../../../db/models';
+import { sequelize } from '../../../db/models';
 import { regBody } from '../../../__mock__/user';
 
 let app;
@@ -8,19 +8,20 @@ let app;
 describe('User Registration', () => {
   let body;
   const url = '/api/v1/auth/register';
-  beforeAll(async () => {
+  beforeAll(async (done) => {
     app = await request(server);
-    await User.destroy({ truncate: true });
+    await sequelize.sync({ force: true });
+    done();
   });
 
   beforeEach(() => {
     body = { ...regBody };
   });
 
-  afterAll(async () => {
-    await User.destroy({ truncate: true });
+  afterAll(async (done) => {
+    await sequelize.sync({ force: true });
     await sequelize.close();
-    // await server?.close();
+    done();
   });
 
   it('should return 422 if no email is not given', async () => {

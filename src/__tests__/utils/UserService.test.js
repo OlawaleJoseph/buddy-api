@@ -1,15 +1,17 @@
 import UserService from '../../utils/userService';
-import { User, sequelize } from '../../db/models';
+import { sequelize } from '../../db/models';
 import { regBody } from '../../__mock__/user';
 
 describe('UserService', () => {
-  beforeAll(async () => {
-    await User.destroy({ truncate: true });
+  beforeAll(async (done) => {
+    await sequelize.sync({ force: true });
+    done();
   });
 
-  afterAll(async () => {
-    await User.destroy({ truncate: true });
+  afterAll(async (done) => {
+    await sequelize.sync({ force: true });
     await sequelize.close();
+    done();
   });
 
   describe('Register', () => {
@@ -40,6 +42,23 @@ describe('UserService', () => {
       const verifiedPassword = UserService.verifyPassword(password, hashedPassword);
       expect(verifiedPassword).toBe(true);
       expect(verifiedPassword).not.toBe(false);
+    });
+  });
+
+  describe('Find By Id', () => {
+    it('should return found user', async () => {
+      const { id } = await UserService.register(regBody);
+      const foundUser = await UserService.findById(id);
+
+      expect(foundUser).toBeTruthy();
+      expect(id).toEqual(foundUser.id);
+      expect(Object.keys(foundUser)).toContain('id', 'username', 'email');
+    });
+
+    it('should return false for not found user', async () => {
+      const foundUser = await UserService.findById(1000);
+
+      expect(foundUser).toBe(false);
     });
   });
 });

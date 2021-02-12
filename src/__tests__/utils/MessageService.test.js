@@ -1,18 +1,24 @@
 import MessageService from '../../utils/MessageService';
-import { Message, User } from '../../db/models';
+import { User, sequelize } from '../../db/models';
 import { msgBody, regBody } from '../../__mock__/user';
 
 describe('MessageService', () => {
-  let body;
-  beforeAll(async () => {
-    await Message.sync({ force: true });
-    await User.sync({ force: true });
-    await User.create(regBody);
-    await User.create({ ...regBody, email: 'test2@mail.com', username: 'username2' });
+  let body; let user1; let user2;
+  beforeAll(async (done) => {
+    await sequelize.sync({ force: true });
+    user1 = await User.create(regBody);
+    user2 = await User.create({ ...regBody, email: 'test2@mail.com', username: 'username2' });
+    done();
   });
 
   beforeEach(() => {
     body = { ...msgBody };
+  });
+
+  afterAll(async (done) => {
+    await sequelize.sync({ force: true });
+    await sequelize.close();
+    done();
   });
 
   describe('Create Message', () => {
@@ -47,6 +53,8 @@ describe('MessageService', () => {
     });
 
     it('should create a new Message', async () => {
+      body.to = user1.id;
+      body.from = user2.id;
       const createdMessage = await MessageService.create(body);
 
       expect(createdMessage).toBeTruthy();

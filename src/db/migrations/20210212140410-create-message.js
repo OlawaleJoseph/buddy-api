@@ -14,10 +14,22 @@ module.exports = {
       to: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        // references: {
+        //   model: 'User',
+        //   key: 'id',
+        // },
+        // onUpdate: 'cascade',
+        // onDelete: 'cascade',
       },
       from: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        // references: {
+        //   model: 'User',
+        //   key: 'id',
+        // },
+        // onUpdate: 'cascade',
+        // onDelete: 'cascade',
       },
       isRead: {
         allowNull: false,

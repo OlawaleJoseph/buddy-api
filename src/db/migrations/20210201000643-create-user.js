@@ -39,6 +39,8 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
+    // await queryInterface.removeConstraint('Users', 'Messages_ibfk_1');
+    await queryInterface.dropTable('Messages');
     await queryInterface.dropTable('Users');
   },
 };
