@@ -4,11 +4,11 @@ import { regBody } from '../../__mock__/user';
 
 describe('UserService', () => {
   beforeAll(async () => {
-    await User.sync({ force: true });
+    await User.destroy({ truncate: true });
   });
 
   afterAll(async () => {
-    await User.sync({ force: true });
+    await User.destroy({ truncate: true });
   });
 
   describe('Register', () => {

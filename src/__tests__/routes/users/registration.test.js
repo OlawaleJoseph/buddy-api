@@ -9,8 +9,8 @@ describe('User Registration', () => {
   let body;
   const url = '/api/v1/auth/register';
   beforeAll(async () => {
-    await User.sync({ force: true });
     app = await request(server);
+    await User.destroy({ truncate: true });
   });
 
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('User Registration', () => {
   });
 
   afterAll(async () => {
-    await User.sync({ force: true });
+    await User.destroy({ truncate: true });
     await server?.close();
   });
 
