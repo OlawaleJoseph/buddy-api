@@ -35,6 +35,22 @@ class UserService {
     return false;
   }
 
+  /**
+   * Find user by id
+   * @param {string} email User's email to be searched
+   * @returns {object} Found user object
+   * @returns {boolean} False if no user was found
+   */
+  static async findById(id) {
+    const user = await User.findOne({
+      where: {
+        id,
+      },
+    });
+    if (user) return user?.dataValues;
+    return false;
+  }
+
   static hashPassword(password) {
     const hash = crypto.pbkdf2Sync(password, UserService.salt,
       1000, 64, 'sha512').toString('hex');

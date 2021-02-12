@@ -9,20 +9,22 @@ let app;
 describe('User Login', () => {
   let body;
   const url = '/api/v1/auth/login';
-  beforeAll(async () => {
+  beforeAll(async (done) => {
     app = request(server);
-    await User.destroy({ truncate: true });
+    await sequelize.sync({ force: true });
     regBody.password = UserService.hashPassword(regBody.password);
     await User.create(regBody);
+    done();
   });
 
   beforeEach(() => {
     body = { ...loginBody };
   });
 
-  afterAll(async () => {
-    await User.destroy({ truncate: true });
+  afterAll(async (done) => {
+    await sequelize.sync({ force: true });
     await sequelize.close();
+    done();
   });
 
   it('should return 422 if no email is given', async () => {

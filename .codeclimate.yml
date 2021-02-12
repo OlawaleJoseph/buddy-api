@@ -1,0 +1,8 @@
+exclude_patterns:
+  src/__tests__/
+  src/__mock__/
+  src/config/
+  src/db/
+  dist/
+  node_modules/
+  coverage/

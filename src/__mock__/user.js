@@ -9,3 +9,9 @@ export const loginBody = {
   email: 'test@mail.com',
   password: 'Password1',
 };
+
+export const msgBody = {
+  to: 1,
+  from: 2,
+  content: 'Test message',
+};

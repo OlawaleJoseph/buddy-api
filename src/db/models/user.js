@@ -2,7 +2,17 @@ import { Model } from 'sequelize';
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate() {
+    static associate(models) {
+      User.hasMany(models.Message, {
+        foreignKey: 'to',
+        // onDelete: 'CASCADE',
+        // onUpdate: 'CASCADE',
+      });
+      User.hasMany(models.Message, {
+        foreignKey: 'from',
+        // onDelete: 'CASCADE',
+        // onUpdate: 'CASCADE',
+      });
     }
   }
   User.init({
