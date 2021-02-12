@@ -1,12 +1,12 @@
 import request from 'supertest';
 import server from '../../../index';
-import { User } from '../../../db/models';
+import { User, sequelize } from '../../../db/models';
 import { loginBody, regBody } from '../../../__mock__/user';
 import UserService from '../../../utils/userService';
 
 let app;
 
-describe('User Registration', () => {
+describe('User Login', () => {
   let body;
   const url = '/api/v1/auth/login';
   beforeAll(async () => {
@@ -22,7 +22,7 @@ describe('User Registration', () => {
 
   afterAll(async () => {
     await User.destroy({ truncate: true });
-    await server?.close();
+    await sequelize.close();
   });
 
   it('should return 422 if no email is given', async () => {

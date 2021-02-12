@@ -1,5 +1,5 @@
 import UserService from '../../utils/userService';
-import { User } from '../../db/models';
+import { User, sequelize } from '../../db/models';
 import { regBody } from '../../__mock__/user';
 
 describe('UserService', () => {
@@ -9,6 +9,7 @@ describe('UserService', () => {
 
   afterAll(async () => {
     await User.destroy({ truncate: true });
+    await sequelize.close();
   });
 
   describe('Register', () => {
