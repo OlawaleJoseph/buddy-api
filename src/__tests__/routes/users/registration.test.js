@@ -18,8 +18,8 @@ describe('User Registration', () => {
   });
 
   afterAll(async () => {
-    await server?.close();
     await User.sync({ force: true });
+    await server?.close();
   });
 
   it('should return 422 if no email is not given', async () => {

@@ -20,6 +20,7 @@ describe('User Registration', () => {
   });
 
   afterAll(async () => {
+    await User.sync({ force: true });
     await server?.close();
   });
 

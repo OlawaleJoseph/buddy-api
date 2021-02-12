@@ -7,6 +7,10 @@ describe('UserService', () => {
     await User.sync({ force: true });
   });
 
+  afterAll(async () => {
+    await User.sync({ force: true });
+  });
+
   describe('Register', () => {
     it('should register a user', async () => {
       const user = await UserService.register(regBody);

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "coverage": "npm run pretest && cross-env NODE_ENV=test jest --coverage && coveralls < coverage/lcov.info",
+    "coverage": "npm run test -- --coverage && coveralls < coverage/lcov.info",
     "dev": "nodemon --exec babel-node src/index.js",
     "lint": "./node_modules/.bin/eslint src/",
     "lint:fix": "./node_modules/.bin/eslint src/ --fix",
