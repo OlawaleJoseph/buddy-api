@@ -158,5 +158,31 @@ describe('Room Service', () => {
     });
   });
 
-  
+  describe('Exit room', async () => {
+    const createdUser = await UserService.create(regBody);
+    const roomId = createdRoom.id;
+    createdRoom.addMember(createdUser);
+
+    it('should throw an error if room id is not provided', async () => {
+      await expect(() => RoomService.exit(undefined, createdUser)).rejects.toThrow();
+    });
+
+    it('should throw an error if user is not provided', async () => {
+      await expect(() => RoomService.exit(roomId, undefined)).rejects.toThrow();
+    });
+
+    it('should throw an error if room does not exist', async () => {
+      await expect(() => RoomService.exit(10000, createdUser)).rejects.toThrow();
+    });
+
+    it('should throw an error if user does not exist', async () => {
+      await expect(() => RoomService.exit(roomId, { id: 10000 })).rejects.toThrow();
+    });
+
+    it('should remove a user as a member of the room', async () => {
+      const exitedRoom = await RoomService.exit(roomId, createdUser);
+
+      await expect(exitedRoom.members).not.toContain(createdUser);
+    });
+  });
 });
