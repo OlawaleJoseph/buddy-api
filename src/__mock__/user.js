@@ -15,3 +15,8 @@ export const msgBody = {
   sender: 2,
   content: 'Test message',
 };
+
+export const roomBody = {
+  title: 'Test Room',
+  avatar: 'avatar_link',
+};

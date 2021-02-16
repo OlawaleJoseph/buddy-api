@@ -6,7 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   class Room extends Model {
     static associate(models) {
       Room.belongsToMany(models.User, { through: 'RoomModerator', as: 'moderators', onDelete: 'cascade' });
-      Room.belongsToMany(models.User, { through: 'UserRoom', as: 'members', onDelete: 'cascade' });
+      Room.belongsToMany(models.User, {
+        through: 'UserRoom', as: 'members', foreignKey: 'RoomId', onDelete: 'cascade',
+      });
       Room.hasMany(models.Message, { as: 'messages', onDelete: 'cascade' });
     }
   }
