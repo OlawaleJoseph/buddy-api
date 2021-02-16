@@ -5,13 +5,22 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Message, {
         foreignKey: 'to',
-        // onDelete: 'CASCADE',
-        // onUpdate: 'CASCADE',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       });
       User.hasMany(models.Message, {
         foreignKey: 'from',
-        // onDelete: 'CASCADE',
-        // onUpdate: 'CASCADE',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      });
+      User.belongsToMany(models.Room, {
+        through: 'RoomModerator',
+        as: 'modRooms',
+        onDelete: 'cascade',
+      });
+      User.belongsToMany(models.Room, {
+        through: 'UserRoom',
+        as: 'myRooms',
       });
     }
   }

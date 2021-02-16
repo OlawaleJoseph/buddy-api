@@ -9,7 +9,7 @@ describe('UserService', () => {
   });
 
   afterAll(async (done) => {
-    await sequelize.sync({ force: true });
+    // await sequelize.sync({ force: true });
     await sequelize.close();
     done();
   });
