@@ -7,7 +7,7 @@ describe('Room Service', () => {
   let createdRoom; let body; let createdUser;
   beforeAll(async (done) => {
     await sequelize.sync({ force: true });
-    createdUser = await UserService.create(regBody);
+    createdUser = await UserService.register(regBody);
     done();
   });
 
@@ -22,19 +22,17 @@ describe('Room Service', () => {
   });
 
   describe('Create Room', () => {
-    it('should throw an error if room title is not provided', async (done) => {
+    it('should throw an error if room title is not provided', async () => {
       body.title = undefined;
 
       await expect(() => RoomService.create(body)).rejects.toThrow();
-      done();
     });
 
-    it('should create a new Room', async (done) => {
+    it('should create a new Room', async () => {
       createdRoom = await RoomService.create(body);
 
       expect(createdRoom).toBeTruthy();
       expect(Object.keys(createdRoom)).toContain('id', 'title', 'messages', 'members', 'moderators');
-      done();
     });
   });
 
