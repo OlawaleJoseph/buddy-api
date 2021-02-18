@@ -73,37 +73,39 @@ describe('Room Service', () => {
     });
   });
 
-  // describe('Remove member from a room', async () => {
-  //
-  //   const roomId = createdRoom.id;
-  //   let user = null;
+  describe('Remove member from a room', () => {
+    let roomId;
+    let userId;
 
-  //   beforeEach(async () => {
-  //     user = { ...createdUser };
-  //   });
+    beforeAll(async () => {
+      const room = await RoomService.create(body);
+      createdUser = await User.create({ ...regBody, username: 'johndoe', email: 'testmail1@mail.com' });
+      roomId = room.id;
+      await RoomService.addMember(roomId, createdUser.id);
+    });
 
-  //   it('should throw an error if room id is not provided', async () => {
-  //     await expect(() => RoomService.removeMember(undefined, user)).rejects.toThrow();
-  //   });
+    beforeEach(async () => {
+      userId = createdUser.id;
+    });
 
-  //   it('should throw an error if user id is not provided', async () => {
-  //     await expect(() => RoomService.removeMember(roomId, undefined)).rejects.toThrow();
-  //   });
+    it('should throw an error if room id is not provided', async () => {
+      await expect(() => RoomService.removeMember(undefined, userId)).rejects.toThrow();
+    });
 
-  //   it('should throw an error if room does not exist', async () => {
-  //     await expect(() => RoomService.removeMember(10000, user)).rejects.toThrow();
-  //   });
+    it('should throw an error if user id is not provided', async () => {
+      await expect(() => RoomService.removeMember(roomId, undefined)).rejects.toThrow();
+    });
 
-  //   it('should throw an error if user does not exist', async () => {
-  //     await expect(() => RoomService.removeMember(roomId, { id: 10000 })).rejects.toThrow();
-  //   });
+    it('should throw an error if room does not exist', async () => {
+      await expect(() => RoomService.removeMember(10000, userId)).rejects.toThrow();
+    });
 
-  //   it('should remove a user as a member of the room', async () => {
-  //     const updatedRoom = await RoomService.removeMember(roomId, user);
+    it('should remove a user as a member of the room', async () => {
+      const updatedRoom = await RoomService.removeMember(roomId, userId);
 
-  //     expect(updatedRoom.members).toContain(user);
-  //   });
-  // });
+      expect(updatedRoom.members.length).toBeFalsy();
+    });
+  });
 
   // describe('Update room', async () => {
   //   const roomId = createdRoom.id;

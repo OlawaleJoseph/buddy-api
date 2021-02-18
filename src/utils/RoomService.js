@@ -67,6 +67,25 @@ class RoomService {
   }
 
   /**
+   * @description A static method to remove user from a room
+   * @param {integer} roomId Room id of the room to add user to
+   * @param {integer} userId Id of user to add to the room
+   * @returns room object
+   */
+  static async removeMember(roomId, userId) {
+    try {
+      if (!userId) throw new Error('User is required');
+      let foundRoom = await RoomService.findRoom(roomId);
+      if (!foundRoom) throw new Error('Room not found');
+      await foundRoom.removeMember(userId);
+      foundRoom = await RoomService.findRoom(roomId);
+      return foundRoom;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  /**
    *@description A validation method for room creation.
    * @param {object} obj object to validate
    */
