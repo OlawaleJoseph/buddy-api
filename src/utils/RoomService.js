@@ -86,6 +86,43 @@ class RoomService {
   }
 
   /**
+   * @description Static method to update room
+   * @param {integer} roomId The id of the room to be updated
+   * @param {object} params The parameters to be updated
+   * @returns Updated room object
+   */
+  static async edit(roomId, params) {
+    const { title, avatar } = params;
+    if (!roomId) throw new Error('Room is required');
+    try {
+      const foundRoom = await RoomService.findRoom(roomId);
+      if (!foundRoom) throw new Error('Room not found');
+      if (!title && !avatar) return false;
+      const roomUpdated = await foundRoom.update(params);
+      return roomUpdated;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  /**
+   * @description Static method to delete a room
+   * @param {integer} id The id of the room to be deleted
+   * @returns Boolean
+   */
+  static async delete(id) {
+    if (!id) throw new Error('Room is required');
+    try {
+      const foundRoom = await RoomService.findRoom(id);
+      if (!foundRoom) throw new Error('Room not found');
+      await foundRoom.destroy();
+      return true;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  /**
    *@description A validation method for room creation.
    * @param {object} obj object to validate
    */

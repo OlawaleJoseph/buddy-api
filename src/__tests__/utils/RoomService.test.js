@@ -4,11 +4,10 @@ import UserService from '../../utils/userService';
 import { regBody, roomBody } from '../../__mock__/user';
 
 describe('Room Service', () => {
-  let createdRoom; let body; let createdUser;
+  let body; let createdUser;
   beforeAll(async (done) => {
     await sequelize.sync({ force: true });
     createdUser = await UserService.register(regBody);
-    createdRoom = await RoomService.create(roomBody);
     done();
   });
 
@@ -17,7 +16,6 @@ describe('Room Service', () => {
   });
 
   afterAll(async (done) => {
-    // await sequelize.sync({ force: true });
     await sequelize.close();
     done();
   });
@@ -107,92 +105,55 @@ describe('Room Service', () => {
     });
   });
 
-  // describe('Update room', async () => {
-  //   const roomId = createdRoom.id;
-  //   const param = { title: 'New Room title' };
+  describe('Update room', () => {
+    let roomId;
+    const param = { title: 'New Room title' };
 
-  //   it('should throw an error if room id is not provided', async () => {
-  //     await expect(() => RoomService.edit(undefined, param)).rejects.toThrow();
-  //   });
+    beforeAll(async () => {
+      const room = await RoomService.create(roomBody);
+      roomId = room.id;
+    });
 
-  //   it('should throw an error if param to update is not provided', async () => {
-  //     await expect(() => RoomService.edit(roomId, {})).rejects.toThrow();
-  //   });
+    it('should throw an error if room id is not provided', async () => {
+      await expect(() => RoomService.edit(undefined, param)).rejects.toThrow();
+    });
 
-  //   it('should throw an error if room does not exist', async () => {
-  //     await expect(() => RoomService.edit(10000, param)).rejects.toThrow();
-  //   });
+    it('should throw an error if param to update is not provided', async () => {
+      const roomUpdated = await RoomService.edit(roomId, {});
 
-  //   it('should throw an error if user does not exist', async () => {
-  //     await expect(() => RoomService.edit(roomId, { id: 10000 })).rejects.toThrow();
-  //   });
+      expect(roomUpdated).toBe(false);
+    });
 
-  //   it('should edit given param of the room', async () => {
-  //     const updatedRoom = await RoomService.edit(roomId, param);
+    it('should throw an error if room does not exist', async () => {
+      await expect(() => RoomService.edit(10000, param)).rejects.toThrow();
+    });
 
-  //     expect(updatedRoom).toBeTruthy();
-  //     expect(updatedRoom.title).toContain(param.title);
-  //   });
-  // });
+    it('should edit given param of the room', async () => {
+      const updatedRoom = await RoomService.edit(roomId, param);
 
-  // describe('Exit room', async () => {
-  //
-  //   const roomId = createdRoom.id;
-  //   createdRoom.addMember(createdUser);
+      expect(updatedRoom).toBeTruthy();
+      expect(updatedRoom.title).toEqual(param.title);
+    });
+  });
 
-  //   it('should throw an error if room id is not provided', async () => {
-  //     await expect(() => RoomService.exit(undefined, createdUser)).rejects.toThrow();
-  //   });
+  describe('Delete room', () => {
+    let roomId;
+    beforeAll(async () => {
+      const room = await RoomService.create(roomBody);
+      roomId = room.id;
+    });
 
-  //   it('should throw an error if user is not provided', async () => {
-  //     await expect(() => RoomService.exit(roomId, undefined)).rejects.toThrow();
-  //   });
+    it('should throw an error if room id is not provided', async () => {
+      await expect(() => RoomService.delete(undefined)).rejects.toThrow();
+    });
 
-  //   it('should throw an error if room does not exist', async () => {
-  //     await expect(() => RoomService.exit(10000, createdUser)).rejects.toThrow();
-  //   });
+    it('should throw an error if room does not exist', async () => {
+      await expect(() => RoomService.delete(10000)).rejects.toThrow();
+    });
 
-  //   it('should throw an error if user does not exist', async () => {
-  //     await expect(() => RoomService.exit(roomId, { id: 10000 })).rejects.toThrow();
-  //   });
-
-  //   it('should remove a user as a member of the room', async () => {
-  //     const exitedRoom = await RoomService.exit(roomId, createdUser);
-
-  //     await expect(exitedRoom.members).not.toContain(createdUser);
-  //   });
-  // });
-
-  // describe('Delete room', async () => {
-  //
-  //   const createdUser2 = await UserService.create({ ...regBody, username: 'john', email: 'teest2@mail.com' });
-  //   const roomId = createdRoom.id;
-  //   createdRoom.addMember(createdUser2);
-
-  //   it('should throw an error if room id is not provided', async () => {
-  //     await expect(() => RoomService.delete(undefined, createdUser)).rejects.toThrow();
-  //   });
-
-  //   it('should throw an error if user is not provided', async () => {
-  //     await expect(() => RoomService.delete(roomId, undefined)).rejects.toThrow();
-  //   });
-
-  //   it('should throw an error if room does not exist', async () => {
-  //     await expect(() => RoomService.delete(10000, createdUser)).rejects.toThrow();
-  //   });
-
-  //   it('should throw an error if user does not exist', async () => {
-  //     await expect(() => RoomService.delete(roomId, { id: 10000 })).rejects.toThrow();
-  //   });
-
-  //   it('should throw an error user is not an admin', async () => {
-  //     await expect(() => RoomService.delete(roomId, createdUser)).rejects.toThrow();
-  //   });
-
-  //   it('should remove a user as a member of the room', async () => {
-  //     const deletedRoom = await RoomService.delete(roomId, createdUser2);
-
-  //     await expect(deletedRoom).toBeTruthy();
-  //   });
-  // });
+    it('should delete the room', async () => {
+      const deletedRoom = await RoomService.delete(roomId);
+      await expect(deletedRoom).toBeTruthy();
+    });
+  });
 });
