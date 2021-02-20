@@ -44,7 +44,7 @@ class RoomService {
       ],
     });
     if (!foundRoom) return false;
-    return foundRoom;
+    return foundRoom.dataValues;
   }
 
   /**
@@ -53,12 +53,19 @@ class RoomService {
    * @param {integer} userId Id of user to add to the room
    * @returns room object
    */
-  static async addMember(roomId, userId) {
+  static async addMember(roomId, userId, admin = false) {
     try {
       if (!userId) throw new Error('User is required');
       let foundRoom = await RoomService.findRoom(roomId);
       if (!foundRoom) throw new Error('Room not found');
-      await foundRoom.addMember(userId);
+      if (admin) {
+        const isMember = foundRoom.members.find(({ id }) => id === userId);
+        if (isMember) await foundRoom.removeMember(userId);
+        await foundRoom.addModerator(userId);
+      } else {
+        const isMember = foundRoom.members.find(({ id }) => id === userId);
+        if (!isMember) await foundRoom.addMember(userId);
+      }
       foundRoom = await RoomService.findRoom(roomId);
       return foundRoom;
     } catch (error) {

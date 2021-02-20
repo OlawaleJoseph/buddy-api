@@ -69,6 +69,11 @@ describe('Room Service', () => {
       const updatedRoom = await RoomService.addMember(roomId, userId);
       expect(updatedRoom.members[0].dataValues.id).toEqual(createdUser.id);
     });
+
+    it('should make a user an admin of the room', async () => {
+      const updatedRoom = await RoomService.addAdmin(roomId, userId);
+      expect(updatedRoom.members[0].dataValues.id).toEqual(createdUser.id);
+    });
   });
 
   describe('Remove member from a room', () => {
