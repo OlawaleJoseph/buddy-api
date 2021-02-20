@@ -41,10 +41,14 @@ class RoomService {
           model: User,
           as: 'members',
         },
+        {
+          model: User,
+          as: 'moderators',
+        },
       ],
     });
     if (!foundRoom) return false;
-    return foundRoom.dataValues;
+    return foundRoom;
   }
 
   /**
