@@ -4,14 +4,25 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.hasMany(models.Message, {
-        foreignKey: 'to',
-        // onDelete: 'CASCADE',
-        // onUpdate: 'CASCADE',
+        foreignKey: 'receiver',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       });
       User.hasMany(models.Message, {
-        foreignKey: 'from',
-        // onDelete: 'CASCADE',
-        // onUpdate: 'CASCADE',
+        foreignKey: 'sender',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      });
+      User.belongsToMany(models.Room, {
+        through: 'RoomModerator',
+        as: 'modRooms',
+        onDelete: 'cascade',
+      });
+      User.belongsToMany(models.Room, {
+        through: 'UserRoom',
+        foreignKey: 'UserId',
+        as: 'myRooms',
+        onDelete: 'cascade',
       });
     }
   }

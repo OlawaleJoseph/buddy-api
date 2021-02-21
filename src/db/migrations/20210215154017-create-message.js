@@ -11,25 +11,25 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      to: {
+      sender: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: 'User',
-        //   key: 'id',
-        // },
-        // onUpdate: 'cascade',
-        // onDelete: 'cascade',
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
-      from: {
+      receiver: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: 'User',
-        //   key: 'id',
-        // },
-        // onUpdate: 'cascade',
-        // onDelete: 'cascade',
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
       isRead: {
         allowNull: false,

@@ -5,12 +5,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Message.belongsTo(models.User, {
         targetKey: 'id',
-        foreignKey: 'to',
+        foreignKey: 'receiver',
       });
       Message.belongsTo(models.User, {
         targetKey: 'id',
-        foreignKey: 'from',
+        foreignKey: 'sender',
       });
+      Message.belongsTo(models.Room, { onDelete: 'cascade', foreignKey: 'RoomId' });
     }
   }
   Message.init({
@@ -18,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    to: {
+    receiver: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    from: {
+    sender: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

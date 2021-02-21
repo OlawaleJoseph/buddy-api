@@ -11,7 +11,12 @@ export const loginBody = {
 };
 
 export const msgBody = {
-  to: 1,
-  from: 2,
+  receiver: 1,
+  sender: 2,
   content: 'Test message',
+};
+
+export const roomBody = {
+  title: 'Test Room',
+  avatar: 'avatar_link',
 };

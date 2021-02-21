@@ -16,32 +16,32 @@ describe('MessageService', () => {
   });
 
   afterAll(async (done) => {
-    await sequelize.sync({ force: true });
+    // await sequelize.sync({ force: true });
     await sequelize.close();
     done();
   });
 
   describe('Create Message', () => {
     it('should thrown an error if sender is not provided', async () => {
-      body.from = undefined;
+      body.sender = undefined;
 
       await expect(() => MessageService.create(body)).rejects.toThrow();
     });
 
     it('should thrown an error if sender does not exist', async () => {
-      body.from = 1000;
+      body.sender = 1000;
 
       await expect(() => MessageService.create(body)).rejects.toThrow();
     });
 
     it('should thrown an error if receiver is not provided', async () => {
-      body.to = undefined;
+      body.receiver = undefined;
 
       await expect(() => MessageService.create(body)).rejects.toThrow();
     });
 
     it('should thrown an error if receiver does not exist', async () => {
-      body.to = 1000;
+      body.receiver = 1000;
 
       await expect(() => MessageService.create(body)).rejects.toThrow();
     });
@@ -53,12 +53,12 @@ describe('MessageService', () => {
     });
 
     it('should create a new Message', async () => {
-      body.to = user1.id;
-      body.from = user2.id;
+      body.receiver = user1.id;
+      body.sender = user2.id;
       const createdMessage = await MessageService.create(body);
 
       expect(createdMessage).toBeTruthy();
-      expect(Object.keys(createdMessage)).toContain('id', 'to', 'content', 'from', 'isRead', 'delivered');
+      expect(Object.keys(createdMessage)).toContain('id', 'to', 'content', 'sender', 'isRead', 'delivered');
     });
   });
 });

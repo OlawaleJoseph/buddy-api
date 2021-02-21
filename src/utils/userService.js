@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import db from '../db/models';
 
-const { User } = db;
+const { User, Room } = db;
 
 class UserService {
   /**
@@ -30,7 +30,18 @@ class UserService {
       where: {
         email,
       },
+      include: [
+        {
+          model: Room,
+          as: 'myRooms',
+        },
+        {
+          model: Room,
+          as: 'modRooms',
+        },
+      ],
     });
+
     if (user) return user?.dataValues;
     return false;
   }
@@ -46,6 +57,16 @@ class UserService {
       where: {
         id,
       },
+      include: [
+        {
+          model: Room,
+          as: 'myRooms',
+        },
+        {
+          model: Room,
+          as: 'modRooms',
+        },
+      ],
     });
     if (user) return user?.dataValues;
     return false;
