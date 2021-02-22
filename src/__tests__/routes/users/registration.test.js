@@ -1,4 +1,5 @@
 import request from 'supertest';
+import path from 'path';
 import server from '../../../index';
 import { sequelize } from '../../../db/models';
 import { regBody } from '../../../__mock__/user';
@@ -19,7 +20,6 @@ describe('User Registration', () => {
   });
 
   afterAll(async (done) => {
-    // await sequelize.sync({ force: true });
     await sequelize.close();
     done();
   });
@@ -84,12 +84,18 @@ describe('User Registration', () => {
 
     expect(res.status).toEqual(422);
     expect(res.status).not.toEqual(404);
-    expect(res.body.error).toContain('Invalid image format');
+    expect(res.body.error).toContain("Invalid image format");
   });
 
   it('should return 201 for valid input', async () => {
-    const res = await app.post(url).send(body);
+    const { username, password, email } = body;
+    const res = await app.post(url)
+      .field('username', username)
+      .field('email', email)
+      .field('password', password)
+      .attach('avatar', path.join(path.dirname(__filename), '../../../assets/lady.jpg'));
 
+    console.log(res.body)
     expect(res.status).toEqual(201);
     expect(res.status).not.toEqual(422);
     expect(res.body.error).toBeFalsy();
